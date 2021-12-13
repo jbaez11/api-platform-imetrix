@@ -1,12 +1,13 @@
 //Importar el modelo
 let User = require('../modelos/userModel');
 let Cluster = require('../modelos/clusterModel');
+let Campaing = require('../modelos/campaingModel');
 const jwt = require('jsonwebtoken');
 
 //Requerir modulo para encriptar las contraseñas
 const bcrypt = require('bcrypt');
 
-//PETICIÓN POST PARA CREAR UN USUARIO
+/* PETICIÓN POST PARA CREAR UN USUARIO */
 let addUser = async (req, res) =>{ 
     try{
     //Obtenemos el cuerpo del formulario
@@ -19,6 +20,7 @@ let addUser = async (req, res) =>{
             password: body.password,//bcrypt.hashSync(body.password, 10),
             state: body.state,
             clusters: body.clusters, //.map(c => c.id),
+            campaings: body.campaings,
             createdBy: body.createdBy,
             role: body.role
 
@@ -36,6 +38,13 @@ let addUser = async (req, res) =>{
             },(err, data)=>{})
         }
 
+        for(let campaing of data.campaings){
+            Campaing.updateMany({_id:campaing},{
+                $addToSet: {
+                    users: userID
+                }
+            },(err, data)=>{})
+        }
         //console.log("Usuario nuevo",userID)
         return res.json({
         
@@ -76,9 +85,9 @@ let addUser = async (req, res) =>{
         
     //     })
     // })
-}
+}/* addUser */
 
-//PETICION GET PARA OBTENER LA LISTA DE TODOS LOS USUARIOS
+/* PETICION GET PARA OBTENER LA LISTA DE TODOS LOS USUARIOS */
 let getUsers = (req, res) =>{
 
     User.find({})
@@ -109,10 +118,10 @@ let getUsers = (req, res) =>{
             })
         })
     })
-}//Petición Get
+}/* getUsers */
 
-//PETICIÓN GET PARA OBTENER LOS USUARIOS ASOCIADOS AL ADMINISTRADOR QUE LOS CREO
-let getSingleUser = (req, res) =>{
+/* PETICIÓN GET PARA OBTENER LOS USUARIOS ASOCIADOS AL ADMINISTRADOR QUE LOS CREO */
+let getAdminUsers = (req, res) =>{
 
     let id = req.params.id;
 
@@ -144,7 +153,7 @@ let getSingleUser = (req, res) =>{
         })
     })
 
-}
+}/* getAdminUsers */
 
 /* PETICIÓN PARA OBTENER UN SOLO USUARIO(AUDITOR) */
 let getUser = (req, res) =>{
@@ -165,9 +174,9 @@ let getUser = (req, res) =>{
         })
        
     })
-}
+}/* getUser */
 
-//PETICIÓN PUT PARA EDITAR UN USUARIO
+/* PETICIÓN PUT PARA EDITAR UN USUARIO */
 let editUser = (req, res) =>{
 
     let id = req.params.id;
@@ -228,6 +237,7 @@ let editUser = (req, res) =>{
                     password: previousPassword,
                     state: body.state,
                     clusters: body.clusters,
+                    campaings: body.campaings,
                     role: body.role
 
                 }
@@ -237,7 +247,6 @@ let editUser = (req, res) =>{
                     if(err){
 
 						let respuesta = {
-
 							res: res,
 							error: err
 						}
@@ -288,9 +297,9 @@ let editUser = (req, res) =>{
 
         })
     })
-}//PUT
+}/* editUser */
 
-//PETICIÓN DELETE PARA BORRAR UN USUARIO ESPECIFICO
+/* PETICIÓN DELETE PARA BORRAR UN USUARIO ESPECIFICO */
 let deleteUser = (req, res) => {
     //capturamos el ID del Administrador a borrar
     let id = req.params.id;
@@ -338,7 +347,7 @@ let deleteUser = (req, res) => {
             })
         })
 
-}
+}/* deleteUser */
 
 //FUNCION LOGIN PARA USUARIOS
 let login = (req, res) =>{
@@ -390,4 +399,4 @@ let login = (req, res) =>{
 }
 
 //EXPORTAMOS LAS FUNCIONES
-module.exports = {addUser, getUser, getSingleUser, editUser, deleteUser, login}
+module.exports = {addUser, getUser, getUsers, getAdminUsers, editUser, deleteUser, login}

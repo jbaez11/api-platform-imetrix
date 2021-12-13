@@ -22,10 +22,17 @@ let userSchema = new Schema({
         required: [true, "El estado del usuario es obligatorio."]
     },
     clusters:[
-        {type: Schema.Types.ObjectId, ref: 'Cluster'}
+        {type: Schema.Types.ObjectId, 
+            ref: 'Cluster'}
+    ],
+    campaings:[
+        {type: Schema.Types.ObjectId, 
+            ref: 'Campaing'}
     ],
     createdBy:{
-        type: Schema.Types.ObjectId, ref: 'Administradores', required: [false, "El usuario que lo creo obligatorio."]
+        type: Schema.Types.ObjectId, 
+        ref: 'Administradores', 
+        required: [false, "El usuario que lo creo obligatorio."]
     },
     role:{
         type: String,

@@ -4,7 +4,7 @@ let Campaing = require('../modelos/campaingModel');
 let fs = require('fs');
 const path = require('path');
 
-//PETICIÓN POST PARA CREAR UNA CAMPAÑA
+/* PETICIÓN POST PARA CREAR UNA CAMPAÑA */
 let addCampaing = (req, res) =>{
 
        //Obtener el cuerpo del Formulario para el modelo de Modulo
@@ -62,7 +62,8 @@ let addCampaing = (req, res) =>{
                 nombre: body.nombre,
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
-                cluster: body.cluster
+                cluster: body.cluster,
+                pais: body.pais
 
             })
 
@@ -90,9 +91,9 @@ let addCampaing = (req, res) =>{
             })
 
         });
-}
+}/* addCampaing */
 
-//PETICION PARA OBTENER TODAS LAS CAMPAÑAS
+/* PETICION PARA OBTENER TODAS LAS CAMPAÑAS */
 let getCampaings = (req, res) =>{
 
     Campaing.find({})
@@ -122,10 +123,10 @@ let getCampaings = (req, res) =>{
             })
         })
     })
-}//GET
+}/* getCampaings */
 
-//PETECIÓN GET PARA OBTENER LAS CAMPAÑAS ASOCIADAS A UN CLUSTER ESPECIFICO
-let getSingleCampaing = (req, res) =>{
+/* PETECIÓN GET PARA OBTENER LAS CAMPAÑAS ASOCIADAS A UN CLUSTER ESPECIFICO */
+let getCampaingCluster = (req, res) =>{
 
     let id = req.params.id;
     Campaing.find({"cluster": id})
@@ -155,9 +156,32 @@ let getSingleCampaing = (req, res) =>{
         })
     })
 
-}//GETSINGLE
+}/* getCampaingCluster */
 
-//PETICIÓN PUT PARA EDITAR UNA CAMPAÑA EN ESPECIFICO
+/* PETICION PARA OBTNER LAS CAMPAÑAS QUE ESTAN ASOCIADAS A UN AUDITOR ESPECIFICO */
+let getCampaingUser = (req, res) =>{
+    
+    let id = req.params.id;
+
+    Campaing.find({"users": id})
+    .populate({path:"users", model:"User"})
+    .exec((err, data) =>{
+
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }
+        res.json({
+            Status: 200,
+            Mensaje: "Campañas asociadas al Usuario",
+            data
+        })
+    })     
+}/* getCampaingUser */
+
+/* PETICIÓN PUT PARA EDITAR UNA CAMPAÑA EN ESPECIFICO */
 let editCampaing = (req, res) =>{
 
     let id = req.params.id;
@@ -266,7 +290,8 @@ let editCampaing = (req, res) =>{
                     nombre: body.nombre,
                     foto: rutaImagen,
                     state: body.state,
-                    cluster: body.cluster
+                    cluster: body.cluster,
+                    pais: body.pais
         
                 }
         
@@ -319,9 +344,9 @@ let editCampaing = (req, res) =>{
             })
         })
     })
-}//EDIT
+}/* editCampaing */
 
-//PETICIÓN PARA ELIMINAR UNA CAMPAÑA EN ESPECIFICO
+/* PETICIÓN PARA ELIMINAR UNA CAMPAÑA EN ESPECIFICO */
 let deleteCampaing = (req, res) => {
     
     //capturamos el ID del Cluster a borrar
@@ -357,7 +382,7 @@ let deleteCampaing = (req, res) => {
 
         //Borramos registro en BD
         Campaing.findByIdAndRemove(id, (err, data) =>{
-            //Validamos que no ocurra error en el proceso
+            //Validamos que no ocurra un error en el proceso
             if(err){
                 return res.json({
                     status: 400,
@@ -368,15 +393,16 @@ let deleteCampaing = (req, res) => {
 
             res.json({
                 status: 200,
+                data,
                 mensaje: "La campaña ha sido eliminada correctamente de la colección"
             })
         })
 
     })
 
-}//DELETE
+}/* deleteCampaing */
 
-//PETICIÓN PARA ACCEDER A LA IMAGEN DE UNA CAMPAÑA
+/* PETICIÓN PARA ACCEDER A LA IMAGEN DE UNA CAMPAÑA */
 let getCampaingImg = (req, res) =>{
     
     let foto = req.params.foto;
@@ -397,7 +423,7 @@ let getCampaingImg = (req, res) =>{
         
 	})
 
-}
+}/* getCampaingImg */
 
-//Exportar las funciones del controlador
-module.exports = {addCampaing, getCampaings, getSingleCampaing, editCampaing, deleteCampaing, getCampaingImg}
+/* Exportar las funciones del controlador */
+module.exports = {addCampaing, getCampaings, getCampaingUser, getCampaingCluster, editCampaing, deleteCampaing, getCampaingImg}

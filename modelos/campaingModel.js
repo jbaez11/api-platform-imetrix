@@ -21,6 +21,15 @@ let campaingSchema = new Schema({
         ref: 'Cluster', 
         required: [true, "El cluster es obligatorio."]
     },
+    users:[
+        {type: Schema.Types.ObjectId, 
+            ref: 'User', 
+            required: [false, "El usuario es obligatorio."]} 
+    ],
+    pais:{
+        type: String,
+        required: [true, "El Pais es Obligatorio."]
+    },
     createdAt: {
         type: Date,
         default: Date.now
