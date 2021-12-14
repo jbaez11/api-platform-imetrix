@@ -52,7 +52,7 @@ let addAdmin = (req, res) =>{
         
         })
     })
-}
+}/* adAdmin */
 
 /* PETICIÓN PARA OBTENER UN SOLO ADMINISTRADOR */
 let getAdmin = (req, res) =>{
@@ -73,7 +73,7 @@ let getAdmin = (req, res) =>{
         })
        
     })
-}
+}/* getAdmin */
 
 /* PETICION PUT PARA EDITAR UN ADMINISTRDOR */
 let editAdmin = (req, res) =>{
@@ -200,7 +200,7 @@ let editAdmin = (req, res) =>{
 
         })
     })
-}//PUT
+}/* editAdmin */
 
 /* PETICION DELETE PARA ELIMINAR UN ADMINISTRADOR */
 let deleteAdmin = (req, res) => {
@@ -261,7 +261,7 @@ let deleteAdmin = (req, res) => {
             })
         })
     })
-}
+}/* deleteAdmin */
 
 /* FUNCION LOGIN PARA ADMINISTRADORES */
 let loginAdmin = (req, res) =>{
@@ -362,7 +362,7 @@ let loginAdmin = (req, res) =>{
                 })
             }   
     })
-}
+}/* loginAdmin */
 
 //EXPORTAMOS LAS FUNCIONES
 module.exports = {addAdmin, getAdmin, editAdmin, deleteAdmin, loginAdmin}
