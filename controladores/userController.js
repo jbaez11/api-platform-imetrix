@@ -388,7 +388,7 @@ let login = (req, res) =>{
         //Generar el token de Autorización
         let token = jwt.sign({
             data
-        }, process.env.SECRET, {expiresIn: 60*60*24*30})
+        }, process.env.SECRET, {expiresIn: 10})
 
         res.json({
              status: 200,
