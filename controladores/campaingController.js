@@ -63,6 +63,7 @@ let addCampaing = (req, res) =>{
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
                 cluster: body.cluster,
+                users: body.users,
                 pais: body.pais
 
             })
@@ -98,6 +99,7 @@ let getCampaings = (req, res) =>{
 
     Campaing.find({})
     .populate({path:"cluster", model:"Cluster"})
+    .populate({path:"users", model:"User"})
     .exec((err, data) => {
         //Si hay un error en la Petición
         if(err){
@@ -291,6 +293,7 @@ let editCampaing = (req, res) =>{
                     foto: rutaImagen,
                     state: body.state,
                     cluster: body.cluster,
+                    users: body.users,
                     pais: body.pais
         
                 }

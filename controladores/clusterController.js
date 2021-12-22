@@ -66,7 +66,8 @@ let addCluster = async (req, res) =>{
                 nombre: body.nombre,
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
-                users: body.users,
+                users: JSON.parse(body.users),
+                createdBy: body.createdBy
 
             })
 
@@ -139,7 +140,42 @@ let getClusters = (req, res) =>{
     })
 }//GET
 
-//PETICIÓN GET PARA OBTENER LOS CLUSTERS ASOCIADOS A EL USUARIO CON LA SESION ACTIVA
+//PETICIÓN GET PARA OBTENER TODOS LOS CLUSTERS ASOCIADOS A UN ADMINISTRADOR
+let getAdminClusters = (req, res) =>{
+
+    let id = req.params.id;
+
+    Cluster.find({"createdBy": id})
+    .populate({path:"createdBy", model:"Administradores"})
+    .populate({path:"users", model:"User"})
+    .exec((err, data) => {
+        //Si hay un error en la Petición
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }
+        //Contar la cantidad de documentos dentro de la colección
+        Cluster.countDocuments({}, (err, total) => {
+            //Si hay un error en la Petición
+            if(err){
+                return res.json({
+                    Status: 500,
+                    Mensaje: "La petición no pudo ser completada."
+                })
+            }
+            
+            res.json({
+                Status: 200,
+                total,
+                data
+            })
+        })
+    })
+}//GET
+
+//PETICIÓN GET PARA OBTENER LOS CLUSTERS ASOCIADOS A UN AUDITOR
 let getSingleCluster = (req, res) =>{
 
     let id = req.params.id;
@@ -273,7 +309,7 @@ let editCluster = (req, res) =>{
                     nombre: body.nombre,
                     foto: rutaImagen,
                     state: body.state,
-                    users: body.users
+                    users: JSON.parse(body.users)
         
                 }
         
@@ -409,4 +445,4 @@ let getClusterImg = (req, res) =>{
 
 
 //EXPORTAMOS LAS FUNCIONES DEL CONTROLADOR
-module.exports = {addCluster, getClusters, getClusterImg, getSingleCluster, editCluster, deleteCluster}
+module.exports = {addCluster, getClusters, getClusterImg, getSingleCluster, getAdminClusters, editCluster, deleteCluster}

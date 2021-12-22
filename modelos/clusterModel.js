@@ -17,8 +17,17 @@ let clusterSchema = new Schema({
         required: [true, "El estado del cluster es obligatorio."]
     },
     users:[
-        {type: Schema.Types.ObjectId, ref: 'User', required: [false, "El usuario es obligatorio."], unique: false} 
+        {type: Schema.Types.ObjectId, 
+            ref: 'User', 
+            required: [false, "El usuario es obligatorio."], 
+            unique: false} 
     ],
+    createdBy:{
+        type: Schema.Types.ObjectId, 
+        ref: 'Administradores', 
+        required: [false, "El usuario que lo creo obligatorio."],
+        unique: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

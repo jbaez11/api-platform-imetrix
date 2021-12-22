@@ -128,6 +128,7 @@ let getAdminUsers = (req, res) =>{
     User.find({"createdBy": id})
     .populate({path:"createdBy", model:"Administradores"})
     .populate({path:"clusters", model:"Cluster"})
+    .populate({path:"campaings", model:"Campaing"})
     .exec((err, data) => {
         if(err){
             return res.json({
