@@ -10,7 +10,7 @@ app.post('/addCampaing', verificarToken, Campaing.addCampaing);
 app.get('/getCampaings', Campaing.getCampaings);
 app.get('/getCampaing/:id', Campaing.getCampaingCluster);
 app.get('/getImgCampaing/:foto', Campaing.getCampaingImg);
-app.get('/getCampaingUser/:id', Campaing.getCampaingUser);
+app.get('/getCampaingUser/:id/:cluster', Campaing.getCampaingUser);
 app.put('/editCampaing/:id', verificarToken, Campaing.editCampaing);
 app.delete('/deleteCampaing/:id', verificarToken, Campaing.deleteCampaing);
 

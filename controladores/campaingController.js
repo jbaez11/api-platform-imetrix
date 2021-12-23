@@ -164,8 +164,9 @@ let getCampaingCluster = (req, res) =>{
 let getCampaingUser = (req, res) =>{
     
     let id = req.params.id;
+    let cluster = req.params.cluster;
 
-    Campaing.find({"users": id})
+    Campaing.find({"users": id, "cluster": cluster})
     .populate({path:"users", model:"User"})
     .exec((err, data) =>{
 
