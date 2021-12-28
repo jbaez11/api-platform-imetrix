@@ -59,11 +59,11 @@ let addCampaing = (req, res) =>{
             //Creamos un nuevo objeto para el modelo de Cluster y obtenemos los parametros
             let campaing = new Campaing({
 
-                nombre: body.nombre,
+                nombre: body.nombre.toUpperCase(),
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
                 cluster: body.cluster,
-                users: body.users,
+                users: JSON.parse(body.users),
                 pais: body.pais
 
             })
@@ -133,6 +133,7 @@ let getCampaingCluster = (req, res) =>{
     let id = req.params.id;
     Campaing.find({"cluster": id})
     .populate({path:"cluster", model:"Cluster"})
+    .populate({path:"users", model:"User"})
     .exec((err, data) => {
         if(err){
             return res.json({

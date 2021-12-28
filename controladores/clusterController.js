@@ -309,7 +309,7 @@ let editCluster = (req, res) =>{
                     nombre: body.nombre,
                     foto: rutaImagen,
                     state: body.state,
-                    users: JSON.parse(body.users)
+                    /* users: JSON.parse(body.users) */
         
                 }
         
