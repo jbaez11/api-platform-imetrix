@@ -295,7 +295,7 @@ let editCampaing = (req, res) =>{
                     foto: rutaImagen,
                     state: body.state,
                     cluster: body.cluster,
-                    users: body.users,
+                    users: JSON.parse(body.users),
                     pais: body.pais
         
                 }
