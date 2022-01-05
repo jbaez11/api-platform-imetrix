@@ -6,7 +6,8 @@ let campaingSchema = new Schema({
 
     nombre:{
         type: String,
-        required: [true, "El nombre de la campaña es obligatorio."]
+        required: [true, "El nombre de la campaña es obligatorio."],
+        uppercase: true
     },
     foto:{
         type: String,
@@ -21,15 +22,15 @@ let campaingSchema = new Schema({
         ref: 'Cluster', 
         required: [true, "El cluster es obligatorio."]
     },
+    pais:{
+        type: String,
+        required: [true, "El Pais es Obligatorio."]
+    },
     users:[
         {type: Schema.Types.ObjectId, 
             ref: 'User', 
             required: [false, "El usuario es obligatorio."]} 
     ],
-    pais:{
-        type: String,
-        required: [true, "El Pais es Obligatorio."]
-    },
     createdAt: {
         type: Date,
         default: Date.now

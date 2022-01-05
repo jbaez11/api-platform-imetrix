@@ -63,8 +63,8 @@ let addCampaing = (req, res) =>{
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
                 cluster: body.cluster,
-                users: JSON.parse(body.users),
-                pais: body.pais
+                pais: body.pais,
+                users: JSON.parse(body.users)
 
             })
 
@@ -294,10 +294,9 @@ let editCampaing = (req, res) =>{
                     nombre: body.nombre,
                     foto: rutaImagen,
                     state: body.state,
-                    cluster: body.cluster,
-                    users: JSON.parse(body.users),
-                    pais: body.pais
-        
+                    pais: body.pais,
+                    users: JSON.parse(body.users)
+                    
                 }
         
                 Campaing.findByIdAndUpdate(id, datosCampaing, {new: true, runValidators: true}, (err, data)=>{

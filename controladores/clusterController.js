@@ -66,8 +66,8 @@ let addCluster = async (req, res) =>{
                 nombre: body.nombre,
                 foto: `${nuevoNombre}.${extension}`,
                 state: body.state,
-                users: JSON.parse(body.users),
-                createdBy: body.createdBy
+                createdBy: body.createdBy,
+                users: JSON.parse(body.users)
 
             })
 
