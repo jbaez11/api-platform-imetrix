@@ -31,9 +31,6 @@ let adminSchema = new Schema({
         type: String,
         required: [true, "El rol es Obligatorio."]
     },
-    clusters:[
-        {type: Schema.Types.ObjectId, ref: 'Cluster', required: [false, "El cluster es obligatorio."]}
-    ],
     state:{
         type: Number,
         required: [true, "El estado del usuario es obligatorio."]
@@ -46,6 +43,14 @@ let adminSchema = new Schema({
     pais:{
         type: String,
         required: [true, "El Pais es Obligatorio."]
+    },
+    valorMinuto:{
+        type: Number,
+        defalut: 0.05
+    },
+    conversacion:{
+        type: Boolean,
+        default: false
     },
     createdAt: {
         type: Date,

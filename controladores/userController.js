@@ -62,29 +62,6 @@ let addUser = async (req, res) =>{
 
             })
     }
-
-    // Guardamos en BD
-    // user.save((err, data) => {
-        
-    //     if(err){
-
-    //         return res.json({
-
-    //             Status: 400,
-    //             mensaje: "Error al guardar el Usuario",
-    //             err
-                
-    //         })
-    //     }
-                        
-    //     res.json({
-        
-    //         status: 200,
-    //         data,
-    //         mensaje: "El Usuario ha sido creado con exito."
-        
-    //     })
-    // })
 }/* addUser */
 
 /* PETICION GET PARA OBTENER LA LISTA DE TODOS LOS USUARIOS */
@@ -237,8 +214,6 @@ let editUser = (req, res) =>{
                     correo: body.correo,
                     password: previousPassword,
                     state: body.state,
-                    clusters: body.clusters,
-                    campaings: body.campaings,
                     role: body.role
 
                 }

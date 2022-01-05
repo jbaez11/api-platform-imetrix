@@ -23,7 +23,6 @@ let addAdmin = (req, res) =>{
         cedula: body.cedula,
         password: body.password,//bcrypt.hashSync(body.password, 10),
         role: body.role,
-        clusters: body.clusters,
         state: body.state,
         nombreEmpresa: body.nombreEmpresa,
         pais: body.pais
@@ -137,7 +136,6 @@ let editAdmin = (req, res) =>{
                     cedula: body.cedula,
                     password: body.previousPassword,//bcrypt.hashSync(body.password, 10),
                     role: body.role,
-                    clusters: body.clusters,
                     state: body.state,
                     nombreEmpresa: body.nombreEmpresa,
                     pais: body.pais
