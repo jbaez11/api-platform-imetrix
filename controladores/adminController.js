@@ -58,7 +58,6 @@ let getAdmin = (req, res) =>{
     let id = req.params.id;
 
     Administrador.find({"_id": id})
-    .populate({path:"clusters", model:"Cluster"})
     .exec((err, data) => {
         if(err){
             return res.json({
