@@ -57,7 +57,7 @@ let addAdmin = (req, res) =>{
 let getAdmin = (req, res) =>{
     let id = req.params.id;
 
-    Administrador.find({"_id": id})
+    Administrador.find({_id: id})
     .exec((err, data) => {
         if(err){
             return res.json({
@@ -67,6 +67,7 @@ let getAdmin = (req, res) =>{
         }  
         res.json({
             Status: 200,
+            mensaje:"Administrador",
             data
         })
        

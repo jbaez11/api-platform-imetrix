@@ -180,7 +180,7 @@ let getSingleCluster = (req, res) =>{
 
     let id = req.params.id;
 
-    Cluster.find({"users": id})
+    Cluster.find({"users": id , state : 1})
     .populate({path:"users", model:"Administradores"})
     .populate({path:"users", model:"User"})
     .exec((err, data) => {
@@ -199,6 +199,30 @@ let getSingleCluster = (req, res) =>{
     })
 
 }//GETSINGLE
+
+/* PETICION PARA OBTNER UN CLUSTER EN ESPECIFICO */
+let getCluster = (req, res) =>{
+    
+    let id = req.params.id;
+/*     let cluster = req.params.cluster; */
+
+    Cluster.findOne({_id:id})
+    .populate({path:"users", model:"User"})
+    .exec((err, data) =>{
+
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }
+        res.json({
+            Status: 200,
+            Mensaje: "Cluster",
+            data
+        })
+    }) 
+} 
 
 //PETICIÓN PUT PARA EDITAR UN CLUSTER
 let editCluster = (req, res) =>{
@@ -445,4 +469,4 @@ let getClusterImg = (req, res) =>{
 
 
 //EXPORTAMOS LAS FUNCIONES DEL CONTROLADOR
-module.exports = {addCluster, getClusters, getClusterImg, getSingleCluster, getAdminClusters, editCluster, deleteCluster}
+module.exports = {addCluster, getClusters, getCluster, getClusterImg, getSingleCluster, getAdminClusters, editCluster, deleteCluster}

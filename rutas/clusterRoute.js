@@ -9,6 +9,7 @@ const {verificarToken} = require('../middleware/autenticacion');
 app.post('/addCluster', verificarToken, Cluster.addCluster);
 app.get('/getClusters', Cluster.getClusters);
 app.get('/getCluster/:id', Cluster.getSingleCluster);
+app.get('/getSingleCluster/:id', Cluster.getCluster);
 app.get('/getAdminClusters/:id', Cluster.getAdminClusters);
 app.get('/getImgCluster/:foto', Cluster.getClusterImg);
 app.put('/editCluster/:id', verificarToken, Cluster.editCluster);

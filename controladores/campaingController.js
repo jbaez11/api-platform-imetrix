@@ -161,13 +161,37 @@ let getCampaingCluster = (req, res) =>{
 
 }/* getCampaingCluster */
 
+/* PETICION PARA OBTNER UNA CAMPAÑA EN ESPECIFICO */
+let getSingleCampaing = (req, res) =>{
+    
+    let id = req.params.id;
+/*     let cluster = req.params.cluster; */
+
+    Campaing.findOne({_id:id})
+    .populate({path:"users", model:"User"})
+    .exec((err, data) =>{
+
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }
+        res.json({
+            Status: 200,
+            Mensaje: "Campaña",
+            data
+        })
+    }) 
+}/* getSingleCampaing */    
+
 /* PETICION PARA OBTNER LAS CAMPAÑAS QUE ESTAN ASOCIADAS A UN AUDITOR ESPECIFICO */
 let getCampaingUser = (req, res) =>{
     
     let id = req.params.id;
     let cluster = req.params.cluster;
 
-    Campaing.find({"users": id, "cluster": cluster})
+    Campaing.find({"users": id, "cluster": cluster, state : 1})
     .populate({path:"users", model:"User"})
     .exec((err, data) =>{
 
@@ -429,4 +453,4 @@ let getCampaingImg = (req, res) =>{
 }/* getCampaingImg */
 
 /* Exportar las funciones del controlador */
-module.exports = {addCampaing, getCampaings, getCampaingUser, getCampaingCluster, editCampaing, deleteCampaing, getCampaingImg}
+module.exports = {addCampaing, getCampaings, getCampaingUser, getSingleCampaing, getCampaingCluster, editCampaing, deleteCampaing, getCampaingImg}
