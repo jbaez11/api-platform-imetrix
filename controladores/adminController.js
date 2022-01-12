@@ -1,6 +1,7 @@
 //Importar el modelo
 let Administrador = require('../modelos/adminModel');
-let User = require('../modelos/userModel')
+let User = require('../modelos/userModel');
+let SuperAdministrador = require('../modelos/superAdminModel');
 const jwt = require('jsonwebtoken');
 
 //Requerir modulo para encriptar las contraseñas
@@ -29,7 +30,7 @@ let addAdmin = (req, res) =>{
         
     })
 
-    //Guardamos en BD
+    /* Guardamos en BD */
     admin.save((err, data) => {
         
         if(err){
@@ -73,6 +74,26 @@ let getAdmin = (req, res) =>{
        
     })
 }/* getAdmin */
+
+/* PETICIÓN GET PARA OBTENER TODOS LOS ADMINISTRADORES */
+let getAllAdmins = (req, res) =>{
+
+    Administrador.find({})
+    .exec((err, data) => {
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }  
+        res.json({
+            Status: 200,
+            mensaje:"Administradores",
+            data
+        })
+       
+    })
+}/* getAllAdmins */
 
 /* PETICION PUT PARA EDITAR UN ADMINISTRDOR */
 let editAdmin = (req, res) =>{
@@ -134,7 +155,7 @@ let editAdmin = (req, res) =>{
                     correo: body.correo,
                     telefono: body.telefono,
                     cedula: body.cedula,
-                    password: body.previousPassword,//bcrypt.hashSync(body.password, 10),
+                    password: previousPassword,//bcrypt.hashSync(body.password, 10),
                     role: body.role,
                     state: body.state,
                     nombreEmpresa: body.nombreEmpresa,
@@ -261,14 +282,14 @@ let deleteAdmin = (req, res) => {
     })
 }/* deleteAdmin */
 
-/* FUNCION LOGIN PARA ADMINISTRADORES */
+/* FUNCION LOGIN PARA ADMINISTRADORES Y/O AUDITORES */
 let loginAdmin = (req, res) =>{
 
     let body = req.body;
-
+    /* Buscamos en el modelo de Administradores */
     Administrador.findOne({correo: body.correo}, (err, data) =>{
 
-        //Validamos que no ocurra error en el proceso
+        /* Validamos que no ocurra error en el proceso */
         if(err){
             return res.json({
                 status: 500,
@@ -277,37 +298,86 @@ let loginAdmin = (req, res) =>{
             }) 
         }
 
-        //Validamos que el correo es correcto
+        /* Si no encuentra el correo en el modelo de Administrador, lo busca en el modelo de Usuarios */
         if(!data){
-            //console.log('body correo 1', body.correo)
+            /* Buscamos en el modelo de Usuarios */
              User.findOne({correo: body.correo}, (err, data) =>{
-               // if(auditor){
-                    //console.log('body correo 2', body.correo)
-                    if(err){
-                        return res.json({
-                            status: 500,
-                            mensaje: "Error en el servidor",
-                            err 
-                            
-                        }) 
-                    }
-    
-                    if(!data){
-                        return res.json({
-                            status: 400,
-                            mensaje: "El Usuario es incorrecto",
-                            err 
-                        }) 
-                    }
-    
+                /* console.log("Entro al modelo de Usuarios") */
+                if(err){
+                    return res.json({
+                        status: 500,
+                        mensaje: "Error en el servidor",
+                        err 
+                    }) 
+                }
+                /* Si no encuentra el correo en el Modelo de Usuarios, lo busca en el modelo de Super Administradores */
+                if(!data){
+                        /* console.log("Entro al modelo de Super Administradores") */
+                        /* Validamos que no ocurra error en el proceso */
+                        if(err){
+                            return res.json({
+                                status: 500,
+                                mensaje: "Error en el servidor",
+                                err 
+                            }) 
+                        }
+                        /* Buscamos en el modelo de Super Administradores */
+                        SuperAdministrador.findOne({correo: body.correo}, (err, data) =>{
+                            /* Si hay Error en la petición */
+                            if(err){
+                                return res.json({
+                                    status: 500,
+                                    mensaje: "Error en el servidor",
+                                    err 
+                                }) 
+                            }
+                            /* Si el correo no es correcto */
+                            if(!data){
+                                return res.json({
+                                    status: 400,
+                                    mensaje: "El Usuario es incorrecto",
+                                    err 
+                                }) 
+                            }
+                            /* Si la contraseña es incorrecta */
+                            if(body.password != data.password){
+                                return res.json({
+                                    status: 400,
+                                    mensaje: "La contraseña es incorrecta",
+                                    err 
+                                }) 
+                            }
+                            /* Si el estado es igual a 0 es decir esta Inhabilitado */
+                            if(data.state === 0){
+                                return res.json({
+                                    status: 400,
+                                    mensaje: "Este usuario se encuentra inhabilitado.",
+                                    err 
+                                }) 
+                            }
+                            /* Si todos los datos son correctos generamos el token de Autorización  */
+                            let token = jwt.sign({
+                                data
+                             }, process.env.SECRET, {expiresIn: "2h"})
+            
+                            res.json({
+                                status: 200,
+                                token,
+                                data
+                            })
+                        })
+                }
+                /* Si encuentra el correo en el Modelo de Usuarios */
+                if(data){
+                    /* Si la contraseña es incorrecta */
                     if(body.password != data.password){
-                        return res.json({
+                         return res.json({
                             status: 400,
                             mensaje: "La contraseña es incorrecta",
                             err 
                         }) 
                     }
-
+                    /* Si el estado es igual a 0 es decir esta Inhabilitado */
                     if(data.state === 0){
                         return res.json({
                             status: 400,
@@ -315,52 +385,51 @@ let loginAdmin = (req, res) =>{
                             err 
                         }) 
                     }
-
-                    //Generar el token de Autorización
+        
+                    /* Si todos los datos son correctos generamos el token de Autorización */
                     let token = jwt.sign({
                         data
                     }, process.env.SECRET, {expiresIn: "2h"})
-
+        
                     res.json({
                         status: 200,
                         token,
                         data
                     })
-                })
-            
+                }  
+            })
+        }
+        /* Si encuentra el correo en el modelo de Administradores */
+        if(data){
+            /* Si la contraseña es incorrecta */
+            if(body.password != data.password){
+                 return res.json({
+                    status: 400,
+                    mensaje: "La contraseña es incorrecta",
+                    err 
+                }) 
             }
-            //console.log('body correo 3', body.correo)
-            //if(!bcrypt.compareSync(body.password, data.password)){
-            if(data){
-                if(body.password != data.password){
-                    return res.json({
-                        status: 400,
-                        mensaje: "La contraseña es incorrecta",
-                        err 
-                    }) 
-                }
-                
-                if(data.state === 0){
-                    return res.json({
-                        status: 400,
-                        mensaje: "Este usuario se encuentra inhabilitado.",
-                        err 
-                    }) 
-                }
+            /* Si el estado es igual a 0 es decir esta Inhabilitado */
+            if(data.state === 0){
+                return res.json({
+                    status: 400,
+                    mensaje: "Este usuario se encuentra inhabilitado.",
+                    err 
+                }) 
+            }
+            /* Si todos los datos son correctos generamos el token de Autorización */
+            let token = jwt.sign({
+                data
+            }, process.env.SECRET, {expiresIn: "2h"})
 
-                //Generar el token de Autorización
-                let token = jwt.sign({
-                    data
-                }, process.env.SECRET, {expiresIn: "2h"})
-
-                res.json({
-                    status: 200,
-                    token,
-                    data
-                })
-            }   
+            res.json({
+                status: 200,
+                token,
+                data
+            })
+        }   
     })
 }/* loginAdmin */
 
 //EXPORTAMOS LAS FUNCIONES
-module.exports = {addAdmin, getAdmin, editAdmin, deleteAdmin, loginAdmin}
+module.exports = {addAdmin, getAdmin, getAllAdmins, editAdmin, deleteAdmin, loginAdmin}

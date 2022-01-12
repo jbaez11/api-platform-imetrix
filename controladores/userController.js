@@ -317,6 +317,7 @@ let deleteUser = (req, res) => {
 
                     res.json({
                         status: 200,
+                        data,
                         mensaje: "El Usuario ha sido eliminado correctamente de la Colección"
                     })
                 })

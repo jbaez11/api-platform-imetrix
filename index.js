@@ -23,6 +23,7 @@ app.use(require('./rutas/clusterRoute'));
 app.use(require('./rutas/campaingRoute'));
 app.use(require('./rutas/userRoute'));
 app.use(require('./rutas/adminRoute'));
+app.use(require('./rutas/superAdminRoute'));
 
 
 //MogoDB Connection

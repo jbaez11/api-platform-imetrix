@@ -32,7 +32,7 @@ let userSchema = new Schema({
     createdBy:{
         type: Schema.Types.ObjectId, 
         ref: 'Administradores', 
-        required: [false, "El Administrador que lo creo obligatorio."]
+        required: [true, "El Administrador que lo creo obligatorio."]
     },
     role:{
         type: String,

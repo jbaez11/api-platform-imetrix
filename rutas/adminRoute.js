@@ -10,9 +10,10 @@ const {verificarToken} = require('../middleware/autenticacion');
 /* Creamos las rutas con el tipo de petición a ejecutar en la API */
 app.post('/addAdmin', Admin.addAdmin);
 app.get('/getAdmin/:id', Admin.getAdmin);
+app.get('/getAllAdmins', Admin.getAllAdmins);
 app.post('/loginAdmin', Admin.loginAdmin);
 app.delete('/deleteAdmin/:id', Admin.deleteAdmin);
 app.put('/editAdmin/:id', verificarToken, Admin.editAdmin);
 
-//Exportar la Ruta
+/* Exportar las rutas */
 module.exports = app;
