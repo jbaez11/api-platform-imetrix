@@ -45,12 +45,10 @@ let adminSchema = new Schema({
         required: [true, "El Pais es Obligatorio."]
     },
     valorMinuto:{
-        type: Number,
-        defalut: 0.05
+        type: Number
     },
     conversacion:{
-        type: Boolean,
-        default: false
+        type: Boolean
     },
     createdAt: {
         type: Date,

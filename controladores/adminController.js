@@ -16,6 +16,10 @@ let addAdmin = (req, res) =>{
     //Obtenemos el cuerpo del formulario
     let body = req.body;
 
+    if(!body.valorMinuto && !body.conversacion){
+        body.valorMinuto = 0.05
+        body.conversacion = false
+    }
     let admin = new Administrador({
 
         nombres: body.nombres,
@@ -26,7 +30,9 @@ let addAdmin = (req, res) =>{
         role: body.role,
         state: body.state,
         nombreEmpresa: body.nombreEmpresa,
-        pais: body.pais
+        pais: body.pais,
+        valorMinuto: body.valorMinuto,
+        conversacion: body.conversacion
         
     })
 
@@ -159,7 +165,9 @@ let editAdmin = (req, res) =>{
                     role: body.role,
                     state: body.state,
                     nombreEmpresa: body.nombreEmpresa,
-                    pais: body.pais
+                    pais: body.pais,
+                    valorMinuto: body.valorMinuto,
+                    conversacion: body.conversacion
 
                 }
         
