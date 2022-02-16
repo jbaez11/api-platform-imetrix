@@ -7,6 +7,7 @@ const {verificarToken} = require('../middleware/autenticacion');
 
 //Crear la ruta HTTP para la petición
 app.post('/addUser', verificarToken, User.addUser);
+app.get('/getUsers', User.getUsers);
 app.get('/getUserProfile/:id', User.getUser);
 app.get('/getUser/:id', User.getAdminUsers);
 app.put('/editUser/:id', verificarToken, User.editUser);

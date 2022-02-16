@@ -22,7 +22,8 @@ let addUser = async (req, res) =>{
             clusters: body.clusters, //.map(c => c.id),
             campaings: body.campaings,
             createdBy: body.createdBy,
-            role: body.role
+            role: body.role,
+            conversacion: body.conversacion
 
         })
 
@@ -133,7 +134,7 @@ let getAdminUsers = (req, res) =>{
 
 }/* getAdminUsers */
 
-/* PETICIÓN PARA OBTENER UN SOLO USUARIO(AUDITOR) */
+/* PETICIÓN PARA OBTENER UN SOLO AUDITOR */
 let getUser = (req, res) =>{
     let id = req.params.id;
 
@@ -214,7 +215,8 @@ let editUser = (req, res) =>{
                     correo: body.correo,
                     password: previousPassword,
                     state: body.state,
-                    role: body.role
+                    role: body.role,
+                    conversacion: body.conversacion
 
                 }
         

@@ -32,11 +32,14 @@ let userSchema = new Schema({
     createdBy:{
         type: Schema.Types.ObjectId, 
         ref: 'Administradores', 
-        required: [true, "El Administrador que lo creo obligatorio."]
+        required: [true, "El Administrador que lo creo es obligatorio."]
     },
     role:{
         type: String,
         required: [true, "El rol es Obligatorio."]
+    },
+    conversacion:{
+        type: Boolean
     },
     createdAt: {
         type: Date,
