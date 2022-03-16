@@ -2,7 +2,6 @@
 let Cluster = require('../modelos/clusterModel');
 let Administrador = require('../modelos/adminModel');
 
-
 let fs = require('fs');
 const path = require('path');
 
@@ -60,7 +59,7 @@ let addCluster = async (req, res) =>{
                 })
             }
 
-            //Creamos un nuevo objeto para el modelo de Cluster y obtenemos los parametros
+            /* Creamos un nuevo objeto para el modelo de Cluster y obtenemos los parametros */
             let cluster = new Cluster({
 
                 nombre: body.nombre,
@@ -71,9 +70,32 @@ let addCluster = async (req, res) =>{
 
             })
 
+            let guardarDatos = async (req, res) =>{
 
+                let dataCluster = await cluster.save()
+                let clusterID = dataCluster._id
+
+                /* console.log("ID del nuevo cluster",clusterID) */
+
+                Administrador.updateMany({_id: dataCluster.createdBy},{
+                    $addToSet:{
+                        clusters: clusterID
+                    }
+                },(err, data) => {})
+                
+            }
+
+            guardarDatos()
+
+            return res.json({
+            
+                status: 200,
+                mensaje: "El cluster ha sido creado con exito."
+        
+            })
+            
             //Guardamos en BD
-            cluster.save((err, data) => {
+            /* cluster.save((err, data) => {
         
                 if(err){
 
@@ -93,17 +115,16 @@ let addCluster = async (req, res) =>{
             
                 })
             
-            })
+            }) */
 
         });
-    } catch (error) {
+    }catch (error) {
 
         return res.json({
-
             Status: 400,
                mensaje: "Error al guardar el Cluster.",
                err: error
-           })
+        })
     }
       
 }//POST

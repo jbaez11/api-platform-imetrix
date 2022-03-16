@@ -31,6 +31,12 @@ let campaingSchema = new Schema({
             ref: 'User', 
             required: [false, "El usuario es obligatorio."]} 
     ],
+    createdBy:{
+        type: Schema.Types.ObjectId, 
+        ref: 'Administradores', 
+        required: [false, "El usuario que lo creo obligatorio."],
+        unique: false
+    },
     createdAt: {
         type: Date,
         default: Date.now

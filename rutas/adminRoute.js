@@ -11,6 +11,7 @@ const {verificarToken} = require('../middleware/autenticacion');
 app.post('/addAdmin', Admin.addAdmin);
 app.get('/getAdmin/:id', Admin.getAdmin);
 app.get('/getAllAdmins', Admin.getAllAdmins);
+app.get('/getAdminInfo', Admin.getAdminInfo);
 app.post('/loginAdmin', Admin.loginAdmin);
 app.delete('/deleteAdmin/:id', Admin.deleteAdmin);
 app.put('/editAdmin/:id', verificarToken, Admin.editAdmin);

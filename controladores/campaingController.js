@@ -1,5 +1,6 @@
 //Importar el modelo
 let Campaing = require('../modelos/campaingModel');
+let Administrador = require('../modelos/adminModel');
 
 let fs = require('fs');
 const path = require('path');
@@ -64,12 +65,37 @@ let addCampaing = (req, res) =>{
                 state: body.state,
                 cluster: body.cluster,
                 pais: body.pais,
-                users: JSON.parse(body.users)
+                users: JSON.parse(body.users),
+                createdBy: body.createdBy
 
             })
 
+            let guardarDatos = async (req, res) =>{
+
+                let dataCampaing = await campaing.save()
+                let campaingID = dataCampaing._id
+
+                console.log("ID de la nueva campaña", campaingID)
+
+                Administrador.updateMany({_id: dataCampaing.createdBy},{
+                    $addToSet:{
+                        campaings: campaingID
+                    }
+                },(err, data) => {})
+
+            }
+
+            guardarDatos()
+
+            return res.json({
+            
+                status: 200,
+                mensaje: "La campaña ha sido creada con exito"
+        
+            })
+
             //Guardamos en BD
-            campaing.save((err, data) => {
+            /* campaing.save((err, data) => {
         
                 if(err){
 
@@ -85,11 +111,11 @@ let addCampaing = (req, res) =>{
                 
                     status: 200,
                     data,
-                    mensaje: "La campaña ha sido creada con exito."
+                    mensaje: "La campaña ha sido creada con exito"
                 
                 })
             
-            })
+            }) */
 
         });
 }/* addCampaing */

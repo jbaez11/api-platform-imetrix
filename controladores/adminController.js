@@ -101,6 +101,29 @@ let getAllAdmins = (req, res) =>{
     })
 }/* getAllAdmins */
 
+/* PETICIÓN PARA OBTENER INFORMACIÓN DE LOS ADMINISTRADORES 
+-- NOMBRE, VALOR MINUTO, CAMPAÑAS Y CLUSTERS -- */
+let getAdminInfo = (req, res) =>{
+
+    Administrador.find({}, {nombres: true, valorMinuto: true, clusters: true, campaings:true})
+    .populate({path:"clusters", model:"Cluster"})
+    .populate({path:"campaings", model:"Campaing"})
+    .exec((err, data) => {
+        if(err){
+            return res.json({
+                Status: 500,
+                Mensaje: "La petición no pudo ser completada."
+            })
+        }  
+        res.json({
+            Status: 200,
+            mensaje:"Información Administradores",
+            data
+        })
+       
+    })
+}
+
 /* PETICION PUT PARA EDITAR UN ADMINISTRDOR */
 let editAdmin = (req, res) =>{
 
@@ -440,4 +463,4 @@ let loginAdmin = (req, res) =>{
 }/* loginAdmin */
 
 //EXPORTAMOS LAS FUNCIONES
-module.exports = {addAdmin, getAdmin, getAllAdmins, editAdmin, deleteAdmin, loginAdmin}
+module.exports = {addAdmin, getAdmin, getAllAdmins, getAdminInfo, editAdmin, deleteAdmin, loginAdmin}

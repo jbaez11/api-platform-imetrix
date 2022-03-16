@@ -50,6 +50,14 @@ let adminSchema = new Schema({
     conversacion:{
         type: Boolean
     },
+    clusters:[
+        {type: Schema.Types.ObjectId, 
+            ref: 'Cluster'}
+    ],
+    campaings:[
+        {type: Schema.Types.ObjectId, 
+            ref: 'Campaing'}
+    ],
     createdAt: {
         type: Date,
         default: Date.now
